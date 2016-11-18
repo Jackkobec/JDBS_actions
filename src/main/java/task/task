@@ -1,0 +1,54 @@
+1. Video
+(2,3 hours)  https://www.youtube.com/watch?v=kspT0ztRo7w&index=10&list=PLvmHg49t5OCSTcNLL4Hti29nXPueU8Wt7
+(2 hours) https://www.youtube.com/watch?v=1--XMKbstVQ&index=11&list=PLvmHg49t5OCSTcNLL4Hti29nXPueU8Wt7
+https://youtu.be/fmCrtNAxIOo?list=PLvmHg49t5OCRQAWSXCl-4XQ-5blr0CH6B&t=3563
+
+2. (5 hours)
+	http://www.sqlcourse.com/intro.html
+	http://www.sqlcourse2.com/joins.html
+
+3. 6 hours
+	Insall MySql
+	Run Server
+	Write script of init databases
+	Use Java(JDBC) for connect to the database server
+
+	Implement next tasks
+	Минимальный список таблиц:
+	Студент:
+	  id
+	  name
+	  group_id
+	Группа
+	  id
+	  name
+	Предмет:
+	  id
+	  name
+	  description
+	Препод
+	  id
+	  name
+	  experience
+	  subject_id (Один препод ведет один предмет)
+	Изучение (имя надо придумать)
+	  group_id
+	  subject_id
+
+Для всех таблиц нужно проставить соответствующие constraints (FK and PK)
+
+1. Наполнить таблицы тестовыми данными
+2. Используя jdbc необходимо:
+  -получить список всех студентовб группб предметов и преподов
+  -добавить сутдента, группу, предмет, препода
+  -обновить информацию о сущностях бд (например студент изменил группу или препода уволили)
+  -получить список студентов определенной группы
+  -узнать какие группы изучают математику
+  -узнать какие предметы узучают все группы (если хотя бы одна не изучает, то предмет не входит в выборку)
+  -какие преподаватель имеют наименьший и наибольший опыт?
+  -какие преподы преподают больше 3-х лет
+  -получить список гуманитарных предметов
+  -узнать средний бал студентов по физике (всех и определенной группы)
+  -показать группу, в которой более 3-х студентов изучают философию (и выгнать с универа)
+
+3. Важно! Покрыть юнит тестами вставку, удаление и обновление данных. Ваша БД дожна быть целостной.

@@ -65,6 +65,30 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
             SQLquery = "INSERT INTO groups(name) VALUES (?)";
         } else return false;
 
+        if (executeQueryInPreparedStatement(entity, SQLquery)) return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean updateEntityInfo(Group entity) {
+
+
+        String SQLquery = "UPDATE groups SET name = ? WHERE id = " + entity.getId() + ";";
+
+        if (getOneByID(entity.getId()) == null) {
+            return false;
+        }
+
+        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+    }
+
+    private boolean executeQueryInPreparedStatement(Group entity, String SQLquery) {
+
+        if (null == SQLquery || entity == null) {
+            throw new NullPointerException("Передан пустой SQLquery / entity");
+        }
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
 
             preparedStatement.setString(1, entity.getName());
@@ -74,30 +98,6 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
             e.printStackTrace();
             return false;
         }
-
-        return true;
-    }
-
-    @Override
-    public boolean updateEntityInfo(Group entity) {
-
-
-        String sqlQuery = "UPDATE groups SET name = ? WHERE id = " + entity.getId() + ";";
-
-        if (getOneByID(entity.getId()) == null) {
-            return false;
-        }
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-
-            preparedStatement.setString(1, entity.getName());
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
         return true;
     }
 
@@ -114,6 +114,10 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
 
     private Group getGroupBySQLquery(String SQLquery) {
+
+        if (null == SQLquery) {
+            throw new NullPointerException("Передан пустой SQLquery");
+        }
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQLquery)) {

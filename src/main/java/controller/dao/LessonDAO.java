@@ -2,10 +2,7 @@ package controller.dao;
 
 import model.Lesson;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,4 +73,51 @@ public class LessonDAO implements CommonDAO<Lesson, Integer> {
             return null;
         }
     }
+
+    @Override
+    public boolean addNewEntity(Lesson entity) {
+
+        String SQLquery;
+
+        if (null != entity) {
+            SQLquery = "INSERT INTO lessons(name, description) VALUES (?, ?)";
+        } else return false;
+
+        if (executeQueryInPreparedStatement(entity, SQLquery)) return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean updateEntityInfo(Lesson entity) {
+
+        String SQLquery = "UPDATE lessons SET name = ?, description = ? WHERE id = " + entity.getId() + ";";
+
+        if (getOneByID(entity.getId()) == null) {
+            return false;
+        }
+
+        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+    }
+
+    private boolean executeQueryInPreparedStatement(Lesson entity, String SQLquery) {
+
+        if (null == SQLquery || entity == null) {
+            throw new NullPointerException("Передан пустой SQLquery / entity");
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
+
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getDescription());
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
 }
