@@ -1,6 +1,7 @@
 package controller.dao;
 
 import model.Group;
+import model.Lesson;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,37 +21,18 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
     @Override
     public List<Group> getAll() {
 
-        List<Group> groups = new ArrayList<>();
         String SQLquery = "SELECT * FROM groups";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
-             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
-
-            while (resultSet.next()) {
-
-                Group group = new Group();
-
-                group.setId(resultSet.getInt("id"));
-                group.setName(resultSet.getString("name"));
-
-                groups.add(group);
-            }
-
-            return groups;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return getListOfGroupsBySQLquery(SQLquery);
     }
 
     @Override
     public Group getOneByID(Integer id) {
 
-        String SQLquery = "";
+        String SQLquery;
 
         if (null != id) {
-            SQLquery = "SELECT * FROM groups WHERE groups.id = " + id + ";";
+            SQLquery = "SELECT * FROM groups WHERE groups.id = " + id;
         } else throw new NullPointerException("Передано значение null");
 
         return getGroupBySQLquery(SQLquery);
@@ -65,9 +47,7 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
             SQLquery = "INSERT INTO groups(name) VALUES (?)";
         } else return false;
 
-        if (executeQueryInPreparedStatement(entity, SQLquery)) return false;
-
-        return true;
+        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
     }
 
     @Override
@@ -106,10 +86,52 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
         String SQLquery = "";
 
         if (null != groupName) {
-            SQLquery = "SELECT * FROM groups WHERE groups.id = " + groupName + ";";
+            SQLquery = "SELECT * FROM groups WHERE groups.name = " + "'" + groupName + "'";
+        } else {
+            throw new NullPointerException("groupName == null");
         }
 
         return getGroupBySQLquery(SQLquery);
+    }
+
+    public List<Group> getGroupsByLesson(String lesson) {
+
+        String SQLquery = "";
+
+        if (null != lesson) {
+            SQLquery = "SELECT groups.id, groups.name FROM learning LEFT JOIN lessons ON learning.lesson_id = lessons.id " +
+                    "RIGHT JOIN groups ON learning.group_id = groups.id WHERE lessons.name = " + "'" + lesson + "'";
+        } else {
+            throw new NullPointerException("lesson == null");
+        }
+
+        return getListOfGroupsBySQLquery(SQLquery);
+
+    }
+
+    private List<Group> getListOfGroupsBySQLquery(String SQLquery) {
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
+             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
+
+            List<Group> groups = new ArrayList<>();
+
+            while (resultSet.next()) {
+
+                Group group = new Group();
+
+                group.setId(resultSet.getInt("id"));
+                group.setName(resultSet.getString("name"));
+
+                groups.add(group);
+            }
+
+            return groups;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -119,8 +141,9 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
             throw new NullPointerException("Передан пустой SQLquery");
         }
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+//             PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
+//             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
 
             Group group = new Group();
             while (resultSet.next()) {

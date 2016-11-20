@@ -68,6 +68,16 @@ CREATE TABLE learning (
  lesson_id INT
 );
 
+INSERT INTO learning(group_id, lesson_id) VAlUES (1, 1);
+INSERT INTO learning(group_id, lesson_id) VAlUES (1, 2);
+INSERT INTO learning(group_id, lesson_id) VAlUES (1, 3);
+INSERT INTO learning(group_id, lesson_id) VAlUES (1, 4);
+
+INSERT INTO learning(group_id, lesson_id) VAlUES (2, 2);
+INSERT INTO learning(group_id, lesson_id) VAlUES (2, 4);
+
+INSERT INTO learning(group_id, lesson_id) VAlUES (3, 1);
+INSERT INTO learning(group_id, lesson_id) VAlUES (3, 3);
 
 
 //task for db end;
@@ -80,6 +90,15 @@ UPDATE groups SET groups.name = 'new name' WHERE groups.id = 2;
 SELECT
 
 SELECT  * FROM prepods, lessons WHERE prepods.lesson_id = lessons.id;
+
+
+JOINS:  ВЫБОРКА ГРУПП ПО ИМЕНИ ПРЕДМЕТА
+СНАЧАЛА ДЕЛАЕМ LEFT JOIN
+ПОТОМ ДЕЛАЕМ ТУТ ЖЕ RIGHT JOIN
+И ВЫБОРКУ ПО WHERE lessons.name = 'java';
+
+SELECT * FROM learning LEFT JOIN lessons ON learning.lesson_id = lessons.id
+RIGHT JOIN groups ON learning.group_id = groups.id WHERE lessons.name = 'java';
 ===================================================================
 
 INSERT INTO addresses(city) VAlUES ('Kiev');

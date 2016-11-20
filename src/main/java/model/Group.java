@@ -1,11 +1,19 @@
 package model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * Created by Jack on 12.11.2016.
  */
+
+@EqualsAndHashCode
+@ToString
 public class Group {
-    private int id;
-    private String name;
+    private @Getter @Setter int id;
+    private @Getter @Setter String name;
 
     public Group() {
     }
@@ -15,27 +23,7 @@ public class Group {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

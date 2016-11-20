@@ -56,8 +56,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
             throw new NullPointerException("Передан пустой SQLquery");
         }
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
 
             List<Prepod> prepods = new ArrayList<>();
 
@@ -92,8 +91,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
         } else throw new NullPointerException("Передано значение null");
 
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
 
             Prepod prepod = new Prepod();
             while (resultSet.next()) {
@@ -121,9 +119,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
             SQLquery = "INSERT INTO prepods(name, experience, subject_id) VALUES (?, ?, ?)";
         } else return false;
 
-        if (executeQueryInPreparedStatement(entity, SQLquery)) return false;
-
-        return true;
+        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
     }
 
     @Override
