@@ -23,8 +23,8 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
         List<Group> groups = new ArrayList<>();
         String SQLquery = "SELECT * FROM groups";
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
+             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
 
             while (resultSet.next()) {
 
