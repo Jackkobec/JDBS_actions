@@ -71,3 +71,77 @@ INSERT INTO students(name,birth,mail,salary,address_id) VALUES ('Ivan',NOW(),'ab
 
 SELECT * FROM students;
 SELECT name, birth FROM students;
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = 1;
+
+select * from groups LEFT JOIN learning ON group_id = learning.group_id
+LEFT JOIN lessons on learning.lesson_id = lessons.id;
+
+//calculate count of all lessons and write to the vatiable
+SET @countOfAllLessons = select count(lessons.id) from lessons;
+
+//compare finded count of lessons in the current group with count of all lessons
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = @countOfAllLessons;
+
+
+
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id;
+
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = 2;
+//max
+select prepods.name, prepods.experience from prepods ORDER BY prepods.experience DESC LIMIT 1;
+//min
+select prepods.name, prepods.experience from prepods ORDER BY prepods.experience ASC LIMIT 1;
+
+select prepods.name, min(prepods.experience) from prepods;
+
+SELECT * from prepods;
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = 1;
+
+select * from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id;
+
+select count(lessons.id) from lessons;
+
+//calculate count of all lessons and write to the vatiable
+SET @countOfAllLessons = select count(lessons.id) from lessons;
+
+//compare finded count of lessons in the current group with count of all lessons
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = @countOfAllLessons;
+//find count of lessons in the current group
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'physics' GROUP BY groups.id;
+
+select * from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id;
+
+
+-----
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = @countOfAllLessons;
+
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id;
+
+
+select groups.name, count(lessons.id) from groups LEFT JOIN learning ON group_id = learning.group_id
+  LEFT JOIN lessons on learning.lesson_id = lessons.id WHERE lessons.name = 'java' GROUP BY groups.id HAVING count(lesson_id) = 2;
+//max
+select prepods.name, prepods.experience from prepods ORDER BY prepods.experience DESC LIMIT 1;
+//min
+select prepods.name, prepods.experience from prepods ORDER BY prepods.experience ASC LIMIT 1;
+
+select prepods.name, min(prepods.experience) from prepods;
+
+SELECT * from prepods;
