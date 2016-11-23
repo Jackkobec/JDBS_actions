@@ -44,11 +44,25 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
     //SQL realisation
     public List<Prepod> getAllPrepodsByExperience(int experience) {
 
-
         String SQLquery = "SELECT * FROM prepods WHERE prepods.experience >= " + experience + ";";
 
         return getListOfPrepodsBySQLquery(SQLquery);
     }
+
+    public Prepod getPrepodsWithMaxExperience() {
+
+        String SQLquery = "select * from prepods ORDER BY prepods.experience DESC LIMIT 1;";
+
+        return getPrepodBySQLquery(SQLquery);
+    }
+
+    public Prepod getPrepodsWithMinExperience() {
+
+        String SQLquery = "select * from prepods ORDER BY prepods.experience ASC LIMIT 1;";
+
+        return getPrepodBySQLquery(SQLquery);
+    }
+
 
     private List<Prepod> getListOfPrepodsBySQLquery(String SQLquery) {
 
@@ -67,7 +81,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
                 prepod.setId(resultSet.getInt("id"));
                 prepod.setName(resultSet.getString("name"));
                 prepod.setExperience(resultSet.getInt("experience"));
-                prepod.setSubject_id(resultSet.getInt("subject_id"));
+                prepod.setLesson_id(resultSet.getInt("subject_id"));
 
                 prepods.add(prepod);
             }
@@ -90,6 +104,14 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
             SQLquery = "SELECT * FROM prepods WHERE prepods.id = " + id + ";";
         } else throw new NullPointerException("Передано значение null");
 
+        return getPrepodBySQLquery(SQLquery);
+    }
+
+    private Prepod getPrepodBySQLquery(String SQLquery) {
+
+        if (null == SQLquery) {
+            throw new NullPointerException("Передан пустой SQLquery");
+        }
 
         try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
 
@@ -99,7 +121,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
                 prepod.setId(resultSet.getInt("id"));
                 prepod.setName(resultSet.getString("name"));
                 prepod.setExperience(resultSet.getInt("experience"));
-                prepod.setSubject_id(resultSet.getInt("subject_id"));
+                prepod.setLesson_id(resultSet.getInt("lesson_id"));
             }
 
             return prepod;
@@ -146,7 +168,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
 
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setInt(2, entity.getExperience());
-            preparedStatement.setInt(3, entity.getSubject_id());
+            preparedStatement.setInt(3, entity.getLesson_id());
             preparedStatement.execute();
 
         } catch (SQLException e) {

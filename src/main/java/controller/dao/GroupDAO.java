@@ -1,6 +1,7 @@
 package controller.dao;
 
 import model.Group;
+import model.Lesson;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -98,7 +99,7 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
     public List<Group> getGroupsByLesson(String lesson) {
 
-        String SQLquery = "";
+        String SQLquery;
 
         if (null != lesson) {
             SQLquery = "SELECT groups.id, groups.name FROM learning LEFT JOIN lessons ON learning.lesson_id = lessons.id " +
@@ -109,6 +110,35 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
         return getListOfGroupsBySQLquery(SQLquery);
 
+    }
+
+    public List<Group> getGroupsWhoLearnAllLessons() {
+
+        List<Lesson> lessons = new LessonDAO(this.connection).getAll();
+
+        String SQLquery = "select groups.id, groups.name, count(DISTINCT lessons.name) from learning " +
+                "LEFT JOIN groups on groups.id = learning.group_id " +
+                "LEFT JOIN lessons on learning.lesson_id = lessons.id " +
+                "GROUP BY groups.name HAVING count(DISTINCT lessons.name) = " + lessons.size();
+
+        return getListOfGroupsBySQLquery(SQLquery);
+    }
+
+    public List<Group> getGroupsWithMoreThan3StudentsLearnLesson(String lesson) {
+
+        String SQLquery;
+
+        if (null != lesson) {
+            SQLquery = "select * from learning " +
+                    "LEFT JOIN  students on students.group_id = learning.group_id " +
+                    "LEFT JOIN lessons on learning.lesson_id = lessons.id " +
+                    "LEFT JOIN groups on learning.group_id = groups.id where lessons.name = "  + "'" + lesson + "'" +
+                    "GROUP BY  groups.name HAVING count(students.id) >= 3;";
+        } else {
+            throw new NullPointerException("lesson == null");
+        }
+
+        return getListOfGroupsBySQLquery(SQLquery);
     }
 
     private List<Group> getListOfGroupsBySQLquery(String SQLquery) {

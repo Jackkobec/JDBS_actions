@@ -40,7 +40,7 @@ public class TestStudentDAO {
     }
 
     @After
-    public void closeConnection(){
+    public void closeConnection() {
 
         try {
             connection.close();

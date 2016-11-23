@@ -12,6 +12,16 @@ CREATE TABLE addresses (
 
 CREATE DATABASE JDBCactions;
 
+CREATE TABLE groups (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR (20)
+);
+
+INSERT INTO groups(name) VAlUES ('group1');
+INSERT INTO groups(name) VAlUES ('group2');
+INSERT INTO groups(name) VAlUES ('group3');
+
+
 CREATE TABLE students (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR (20),
@@ -28,14 +38,6 @@ INSERT INTO students(name, group_id) VAlUES ('Anna',2);
 INSERT INTO students(name, group_id) VAlUES ('Kata',3);
 INSERT INTO students(name, group_id) VAlUES ('Elena',3);
 
-CREATE TABLE groups (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR (20)
-);
-
-INSERT INTO groups(name) VAlUES ('group1');
-INSERT INTO groups(name) VAlUES ('group2');
-INSERT INTO groups(name) VAlUES ('group3');
 
 CREATE TABLE lessons (
   id INT PRIMARY KEY AUTO_INCREMENT,

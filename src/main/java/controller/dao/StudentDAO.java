@@ -101,7 +101,6 @@ public class StudentDAO implements CommonDAO<Student, Integer> {
         return true;
     }
 
-
     public List<Student> getStudentsByGroup(Group group) {
 
         String SQLquery;
