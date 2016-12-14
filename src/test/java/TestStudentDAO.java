@@ -70,7 +70,7 @@ public class TestStudentDAO {
     @Test
     public void getStudentByID() {
 
-        String expected = "Student{id=2, name='Peta', group_id=1}";
+        String expected = "Student(id=2, name=Peta, group_id=1)";
         Student student = studentDAO.getOneByID(2);
 
         Assert.assertEquals(expected, student.toString());
