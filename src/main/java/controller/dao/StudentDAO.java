@@ -25,21 +25,21 @@ public class StudentDAO implements CommonDAO<Student, Integer> {
     @Override
     public List<Student> getAll() {
 
-        String SQLquery = "SELECT * FROM students";
+        String sqlQuery = "SELECT * FROM students";
 
-        return getListOfStudentsBySQLquery(SQLquery);
+        return getListOfStudentsBySQLquery(sqlQuery);
     }
 
     @Override
     public Student getOneByID(Integer id) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != id) {
-            SQLquery = "SELECT * FROM students WHERE students.id = " + id + ";";
+            sqlQuery = "SELECT * FROM students WHERE students.id = " + id + ";";
         } else throw new NullPointerException("Передано значение null");
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             Student student = new Student();
             while (resultSet.next()) {
@@ -60,35 +60,35 @@ public class StudentDAO implements CommonDAO<Student, Integer> {
     @Override
     public boolean addNewEntity(Student entity) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != entity) {
-            SQLquery = "INSERT INTO students(name, group_id) VALUES (?, ?)";
+            sqlQuery = "INSERT INTO students(name, group_id) VALUES (?, ?)";
         } else return false;
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
     @Override
     public boolean updateEntityInfo(Student entity) {
 
 
-        String SQLquery = "UPDATE students SET name = ?, group_id = ? WHERE id = " + entity.getId() + ";";
+        String sqlQuery = "UPDATE students SET name = ?, group_id = ? WHERE id = " + entity.getId() + ";";
 
         if (getOneByID(entity.getId()) == null) {
             return false;
         }
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
-    private boolean executeQueryInPreparedStatement(Student entity, String SQLquery) {
+    private boolean executeQueryInPreparedStatement(Student entity, String sqlQuery) {
 
-        if (null == SQLquery || entity == null) {
-            throw new NullPointerException("Передан пустой SQLquery / entity");
+        if (null == sqlQuery || entity == null) {
+            throw new NullPointerException("Передан пустой sqlQuery / entity");
         }
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setInt(2, entity.getGroup_id());
@@ -103,25 +103,25 @@ public class StudentDAO implements CommonDAO<Student, Integer> {
 
     public List<Student> getStudentsByGroup(Group group) {
 
-        String SQLquery;
+        String sqlQuery;
 
 
         if (null != group) {
-            SQLquery = "SELECT * FROM students WHERE students.group_id = " + group.getId() + ";";
+            sqlQuery = "SELECT * FROM students WHERE students.group_id = " + group.getId() + ";";
 
         } else throw new NullPointerException("Передано значение null");
 
-        return getListOfStudentsBySQLquery(SQLquery);
+        return getListOfStudentsBySQLquery(sqlQuery);
 
     }
 
-    private List<Student> getListOfStudentsBySQLquery(String SQLquery) {
+    private List<Student> getListOfStudentsBySQLquery(String sqlQuery) {
 
-        if (null == SQLquery) {
-            throw new NullPointerException("Передан пустой SQLquery");
+        if (null == sqlQuery) {
+            throw new NullPointerException("Передан пустой sqlQuery");
         }
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             List<Student> students = new ArrayList<>();
 

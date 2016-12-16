@@ -21,9 +21,9 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
     public List<Prepod> getAll() {
 
 
-        String SQLquery = "SELECT * FROM prepods";
+        String sqlQuery = "SELECT * FROM prepods";
 
-        return getListOfPrepodsBySQLquery(SQLquery);
+        return getListOfPrepodsBySQLquery(sqlQuery);
     }
 
     //java realisation
@@ -44,33 +44,33 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
     //SQL realisation
     public List<Prepod> getAllPrepodsByExperience(int experience) {
 
-        String SQLquery = "SELECT * FROM prepods WHERE prepods.experience >= " + experience + ";";
+        String sqlQuery = "SELECT * FROM prepods WHERE prepods.experience >= " + experience + ";";
 
-        return getListOfPrepodsBySQLquery(SQLquery);
+        return getListOfPrepodsBySQLquery(sqlQuery);
     }
 
     public Prepod getPrepodsWithMaxExperience() {
 
-        String SQLquery = "select * from prepods ORDER BY prepods.experience DESC LIMIT 1;";
+        String sqlQuery = "select * from prepods ORDER BY prepods.experience DESC LIMIT 1;";
 
-        return getPrepodBySQLquery(SQLquery);
+        return getPrepodBySQLquery(sqlQuery);
     }
 
     public Prepod getPrepodsWithMinExperience() {
 
-        String SQLquery = "select * from prepods ORDER BY prepods.experience ASC LIMIT 1;";
+        String sqlQuery = "select * from prepods ORDER BY prepods.experience ASC LIMIT 1;";
 
-        return getPrepodBySQLquery(SQLquery);
+        return getPrepodBySQLquery(sqlQuery);
     }
 
 
-    private List<Prepod> getListOfPrepodsBySQLquery(String SQLquery) {
+    private List<Prepod> getListOfPrepodsBySQLquery(String sqlQuery) {
 
-        if (null == SQLquery) {
-            throw new NullPointerException("Передан пустой SQLquery");
+        if (null == sqlQuery) {
+            throw new NullPointerException("Передан пустой sqlQuery");
         }
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             List<Prepod> prepods = new ArrayList<>();
 
@@ -98,22 +98,22 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
     @Override
     public Prepod getOneByID(Integer id) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != id) {
-            SQLquery = "SELECT * FROM prepods WHERE prepods.id = " + id + ";";
+            sqlQuery = "SELECT * FROM prepods WHERE prepods.id = " + id + ";";
         } else throw new NullPointerException("Передано значение null");
 
-        return getPrepodBySQLquery(SQLquery);
+        return getPrepodBySQLquery(sqlQuery);
     }
 
-    private Prepod getPrepodBySQLquery(String SQLquery) {
+    private Prepod getPrepodBySQLquery(String sqlQuery) {
 
-        if (null == SQLquery) {
-            throw new NullPointerException("Передан пустой SQLquery");
+        if (null == sqlQuery) {
+            throw new NullPointerException("Передан пустой sqlQuery");
         }
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             Prepod prepod = new Prepod();
             while (resultSet.next()) {
@@ -135,36 +135,36 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
     @Override
     public boolean addNewEntity(Prepod entity) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != entity) {
-            SQLquery = "INSERT INTO prepods(name, experience, subject_id) VALUES (?, ?, ?)";
+            sqlQuery = "INSERT INTO prepods(name, experience, subject_id) VALUES (?, ?, ?)";
         } else return false;
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return (executeQueryInPreparedStatement(entity, sqlQuery)) ? true : false;
     }
 
     @Override
     public boolean updateEntityInfo(Prepod entity) {
 
 
-        String SQLquery = "UPDATE groups SET name = ?. experience = ?, subject_id = ? " +
+        String sqlQuery = "UPDATE groups SET name = ?. experience = ?, subject_id = ? " +
                 "WHERE id = " + entity.getId() + ";";
 
         if (getOneByID(entity.getId()) == null) {
             return false;
         }
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery));
     }
 
-    private boolean executeQueryInPreparedStatement(Prepod entity, String SQLquery) {
+    private boolean executeQueryInPreparedStatement(Prepod entity, String sqlQuery) {
 
-        if (null == SQLquery || entity == null) {
-            throw new NullPointerException("Передан пустой SQLquery / entity");
+        if (null == sqlQuery || entity == null) {
+            throw new NullPointerException("Передан пустой sqlQuery / entity");
         }
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setInt(2, entity.getExperience());

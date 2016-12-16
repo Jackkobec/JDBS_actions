@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * Created by Jack on 18.11.2016.
  */
-public interface CommonDAO<ENTITY_CLASS, ID_TYPE> {
+public interface CommonDAO<E, I> {
 
-    List<ENTITY_CLASS> getAll();
+    List<E> getAll();
 
-    ENTITY_CLASS getOneByID(ID_TYPE id);
+    E getOneByID(I id);
 
-    boolean addNewEntity(ENTITY_CLASS entity);
+    boolean addNewEntity(E entity);
 
-    boolean updateEntityInfo(ENTITY_CLASS entity);
+    boolean updateEntityInfo(E entity);
 
 }

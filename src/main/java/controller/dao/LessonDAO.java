@@ -21,9 +21,9 @@ public class LessonDAO implements CommonDAO<Lesson, Integer> {
     public List<Lesson> getAll() {
 
         List<Lesson> lessons = new ArrayList<>();
-        String SQLquery = "SELECT * FROM lessons";
+        String sqlQuery = "SELECT * FROM lessons";
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             while (resultSet.next()) {
 
@@ -47,14 +47,14 @@ public class LessonDAO implements CommonDAO<Lesson, Integer> {
     @Override
     public Lesson getOneByID(Integer id) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != id) {
-            SQLquery = "SELECT * FROM lessons WHERE lessons.id = " + id + ";";
+            sqlQuery = "SELECT * FROM lessons WHERE lessons.id = " + id + ";";
         } else throw new NullPointerException("Передано значение null");
 
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
 
             Lesson lesson = new Lesson();
             while (resultSet.next()) {
@@ -75,34 +75,34 @@ public class LessonDAO implements CommonDAO<Lesson, Integer> {
     @Override
     public boolean addNewEntity(Lesson entity) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != entity) {
-            SQLquery = "INSERT INTO lessons(name, description) VALUES (?, ?)";
+            sqlQuery = "INSERT INTO lessons(name, description) VALUES (?, ?)";
         } else return false;
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
     @Override
     public boolean updateEntityInfo(Lesson entity) {
 
-        String SQLquery = "UPDATE lessons SET name = ?, description = ? WHERE id = " + entity.getId() + ";";
+        String sqlQuery = "UPDATE lessons SET name = ?, description = ? WHERE id = " + entity.getId() + ";";
 
         if (getOneByID(entity.getId()) == null) {
             return false;
         }
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
-    private boolean executeQueryInPreparedStatement(Lesson entity, String SQLquery) {
+    private boolean executeQueryInPreparedStatement(Lesson entity, String sqlQuery) {
 
-        if (null == SQLquery || entity == null) {
-            throw new NullPointerException("Передан пустой SQLquery / entity");
+        if (null == sqlQuery || entity == null) {
+            throw new NullPointerException("Передан пустой sqlQuery / entity");
         }
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getDescription());

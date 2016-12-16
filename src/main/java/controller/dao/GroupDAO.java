@@ -24,55 +24,55 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
     @Override
     public List<Group> getAll() {
 
-        String SQLquery = "SELECT * FROM groups";
+        String sqlQuery = "SELECT * FROM groups";
 
-        return getListOfGroupsBySQLquery(SQLquery);
+        return getListOfGroupsBySQLquery(sqlQuery);
     }
 
     @Override
     public Group getOneByID(Integer id) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != id) {
-            SQLquery = "SELECT * FROM groups WHERE groups.id = " + id;
+            sqlQuery = "SELECT * FROM groups WHERE groups.id = " + id;
         } else throw new NullPointerException("Передано значение null");
 
-        return getGroupBySQLquery(SQLquery);
+        return getGroupBySQLquery(sqlQuery);
     }
 
     @Override
     public boolean addNewEntity(Group entity) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != entity) {
-            SQLquery = "INSERT INTO groups(name) VALUES (?)";
+            sqlQuery = "INSERT INTO groups(name) VALUES (?)";
         } else return false;
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
     @Override
     public boolean updateEntityInfo(Group entity) {
 
 
-        String SQLquery = "UPDATE groups SET name = ? WHERE id = " + entity.getId() + ";";
+        String sqlQuery = "UPDATE groups SET name = ? WHERE id = " + entity.getId() + ";";
 
         if (getOneByID(entity.getId()) == null) {
             return false;
         }
 
-        return (executeQueryInPreparedStatement(entity, SQLquery)) ? true : false;
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
-    private boolean executeQueryInPreparedStatement(Group entity, String SQLquery) {
+    private boolean executeQueryInPreparedStatement(Group entity, String sqlQuery) {
 
-        if (null == SQLquery || entity == null) {
-            throw new NullPointerException("Передан пустой SQLquery / entity");
+        if (null == sqlQuery || entity == null) {
+            throw new NullPointerException("Передан пустой sqlQuery / entity");
         }
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
             preparedStatement.setString(1, entity.getName());
             preparedStatement.execute();
@@ -86,29 +86,29 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
     public Group getOneByName(String groupName) {
 
-        String SQLquery = "";
+        String sqlQuery;
 
         if (null != groupName) {
-            SQLquery = "SELECT * FROM groups WHERE groups.name = " + "'" + groupName + "'";
+            sqlQuery = "SELECT * FROM groups WHERE groups.name = " + "'" + groupName + "'";
         } else {
             throw new NullPointerException("groupName == null");
         }
 
-        return getGroupBySQLquery(SQLquery);
+        return getGroupBySQLquery(sqlQuery);
     }
 
     public List<Group> getGroupsByLesson(String lesson) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != lesson) {
-            SQLquery = "SELECT groups.id, groups.name FROM learning LEFT JOIN lessons ON learning.lesson_id = lessons.id " +
+            sqlQuery = "SELECT groups.id, groups.name FROM learning LEFT JOIN lessons ON learning.lesson_id = lessons.id " +
                     "RIGHT JOIN groups ON learning.group_id = groups.id WHERE lessons.name = " + "'" + lesson + "'";
         } else {
             throw new NullPointerException("lesson == null");
         }
 
-        return getListOfGroupsBySQLquery(SQLquery);
+        return getListOfGroupsBySQLquery(sqlQuery);
 
     }
 
@@ -116,20 +116,20 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
         List<Lesson> lessons = new LessonDAO(this.connection).getAll();
 
-        String SQLquery = "select groups.id, groups.name, count(DISTINCT lessons.name) from learning " +
+        String sqlQuery = "select groups.id, groups.name, count(DISTINCT lessons.name) from learning " +
                 "LEFT JOIN groups on groups.id = learning.group_id " +
                 "LEFT JOIN lessons on learning.lesson_id = lessons.id " +
                 "GROUP BY groups.name HAVING count(DISTINCT lessons.name) = " + lessons.size();
 
-        return getListOfGroupsBySQLquery(SQLquery);
+        return getListOfGroupsBySQLquery(sqlQuery);
     }
 
     public List<Group> getGroupsWithMoreThan3StudentsLearnLesson(String lesson) {
 
-        String SQLquery;
+        String sqlQuery;
 
         if (null != lesson) {
-            SQLquery = "select * from learning " +
+            sqlQuery = "select * from learning " +
                     "LEFT JOIN  students on students.group_id = learning.group_id " +
                     "LEFT JOIN lessons on learning.lesson_id = lessons.id " +
                     "LEFT JOIN groups on learning.group_id = groups.id where lessons.name = "  + "'" + lesson + "'" +
@@ -138,13 +138,13 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
             throw new NullPointerException("lesson == null");
         }
 
-        return getListOfGroupsBySQLquery(SQLquery);
+        return getListOfGroupsBySQLquery(sqlQuery);
     }
 
-    private List<Group> getListOfGroupsBySQLquery(String SQLquery) {
+    private List<Group> getListOfGroupsBySQLquery(String sqlQuery) {
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
-             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+             ResultSet resultSet = preparedStatement.executeQuery(sqlQuery)) {
 
             List<Group> groups = new ArrayList<>();
 
@@ -167,15 +167,15 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
     }
 
 
-    private Group getGroupBySQLquery(String SQLquery) {
+    private Group getGroupBySQLquery(String sqlQuery) {
 
-        if (null == SQLquery) {
-            throw new NullPointerException("Передан пустой SQLquery");
+        if (null == sqlQuery) {
+            throw new NullPointerException("Передан пустой sqlQuery");
         }
 
-        try (ResultSet resultSet = connection.prepareStatement(SQLquery).executeQuery(SQLquery)) {
-//             PreparedStatement preparedStatement = connection.prepareStatement(SQLquery);
-//             ResultSet resultSet = preparedStatement.executeQuery(SQLquery)) {
+        try (ResultSet resultSet = connection.prepareStatement(sqlQuery).executeQuery(sqlQuery)) {
+//             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+//             ResultSet resultSet = preparedStatement.executeQuery(sqlQuery)) {
 
             Group group = new Group();
             while (resultSet.next()) {
