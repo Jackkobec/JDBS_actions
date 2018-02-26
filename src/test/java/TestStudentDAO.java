@@ -1,3 +1,4 @@
+import persestince.ConnectionManager;
 import persestince.StudentDAO;
 import model.Student;
 import org.junit.After;
@@ -27,26 +28,12 @@ public class TestStudentDAO {
 
     @Before
     public void init() throws IOException, SQLException {
-
-        properties = new Properties();
-        properties.load(new FileInputStream(new File(PATH_TO_PROPERTIES)));
-
-        connection = DriverManager.getConnection(
-                properties.getProperty("URL"),
-                properties.getProperty("USER"),
-                properties.getProperty("PASSWORD"));
-
         studentDAO = new StudentDAO();
     }
 
     @After
     public void closeConnection() {
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ConnectionManager.getConnectionManager().closeConnection();
     }
 
     @Test

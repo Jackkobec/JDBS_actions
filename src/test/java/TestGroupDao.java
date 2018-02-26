@@ -1,56 +1,24 @@
-import persestince.GroupDAO;
 import model.Group;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import persestince.ConnectionManager;
+import persestince.GroupDAO;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Jack on 20.11.2016.
  */
 public class TestGroupDao {
 
-    private final static String PATH_TO_PROPERTIES = "src/main/resources/app.properties";
-    private Connection connection;
-    private Properties properties;
     private GroupDAO groupDAO;
 
     @Before
-    public void init() throws IOException, SQLException, ClassNotFoundException {
-
-        properties = new Properties();
-        properties.load(new FileInputStream(new File(PATH_TO_PROPERTIES)));
-
-//        connection = DriverManager.getConnection(
-//                properties.getProperty("URL"),
-//                properties.getProperty("USER"),
-//                properties.getProperty("PASSWORD"));
-
-//        Class.forName("org.h2.Driver");
-//        connection = DriverManager.
-//                getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "");
-//        groupDAO = new GroupDAO(connection);
-//        System.out.println(connection);
-
+    public void init(){
         groupDAO = new GroupDAO();
     }
-
-//    @After
-//    public void closeConnection() {
-//
-//        try {
-//            connection.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @Test
     public void testGetAllGroups() {
@@ -59,7 +27,12 @@ public class TestGroupDao {
         List<Group> students = groupDAO.getAll();
         System.out.println(students);
 
-//        Assert.assertEquals(expected, students.toString());
+        Assert.assertEquals(expected, students.toString());
+    }
+
+    @After
+    public void closeConnection() {
+        ConnectionManager.getConnectionManager().closeConnection();
     }
 
     @Test
