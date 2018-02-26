@@ -1,4 +1,4 @@
-package controller.dao;
+package persestince;
 
 import model.Prepod;
 
@@ -13,8 +13,8 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
 
     private Connection connection;
 
-    public PrepodDAO(Connection connection) {
-        this.connection = connection;
+    public PrepodDAO() {
+        this.connection = ConnectionManager.getConnectionManager().getConnection();
     }
 
     @Override
@@ -155,7 +155,7 @@ public class PrepodDAO implements CommonDAO<Prepod, Integer> {
             return false;
         }
 
-        return executeQueryInPreparedStatement(entity, sqlQuery));
+        return executeQueryInPreparedStatement(entity, sqlQuery);
     }
 
     private boolean executeQueryInPreparedStatement(Prepod entity, String sqlQuery) {

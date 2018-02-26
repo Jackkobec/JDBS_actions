@@ -1,4 +1,4 @@
-package controller.dao;
+package persestince;
 
 import model.Group;
 import model.Lesson;
@@ -16,15 +16,36 @@ import java.util.List;
 public class GroupDAO implements CommonDAO<Group, Integer> {
 
     private Connection connection;
+//    private static final String DB_CONNECTION = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false";
+//private static final String DB_CONNECTION = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=1000";
 
-    public GroupDAO(Connection connection) {
-        this.connection = connection;
+
+
+    public GroupDAO() {
+        connection = ConnectionManager.getConnectionManager().getConnection();
     }
+
+
+//    private Connection getDBConnection() {
+//        Connection dbConnection = null;
+//        try {
+//            Class.forName(DB_DRIVER);
+//        } catch (ClassNotFoundException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        try {
+//            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+//            return dbConnection;
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return dbConnection;
+//    }
 
     @Override
     public List<Group> getAll() {
 
-        String sqlQuery = "SELECT * FROM groups";
+        String sqlQuery = "SELECT * FROM GROUPS";
 
         return getListOfGroupsBySQLquery(sqlQuery);
     }
@@ -114,7 +135,7 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
 
     public List<Group> getGroupsWhoLearnAllLessons() {
 
-        List<Lesson> lessons = new LessonDAO(this.connection).getAll();
+        List<Lesson> lessons = new LessonDAO().getAll();
 
         String sqlQuery = "select groups.id, groups.name, count(DISTINCT lessons.name) from learning " +
                 "LEFT JOIN groups on groups.id = learning.group_id " +
@@ -141,17 +162,18 @@ public class GroupDAO implements CommonDAO<Group, Integer> {
         return getListOfGroupsBySQLquery(sqlQuery);
     }
 
-    private List<Group> getListOfGroupsBySQLquery(String sqlQuery) {
+    private List<Group> getListOfGroupsBySQLquery(final String sqlQuery) {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-             ResultSet resultSet = preparedStatement.executeQuery(sqlQuery)) {
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+//        try (Statement statement = connection.createStatement();
+//             ResultSet resultSet = statement.executeQuery(sqlQuery)) {
 
             List<Group> groups = new ArrayList<>();
 
             while (resultSet.next()) {
-
                 Group group = new Group();
-
                 group.setId(resultSet.getInt("id"));
                 group.setName(resultSet.getString("name"));
 

@@ -1,4 +1,4 @@
-package controller.dao;
+package persestince;
 
 import model.Lesson;
 
@@ -13,8 +13,8 @@ public class LessonDAO implements CommonDAO<Lesson, Integer> {
 
     private Connection connection;
 
-    public LessonDAO(Connection connection) {
-        this.connection = connection;
+    public LessonDAO() {
+        this.connection = ConnectionManager.getConnectionManager().getConnection();
     }
 
     @Override

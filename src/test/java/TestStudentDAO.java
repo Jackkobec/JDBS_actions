@@ -1,4 +1,4 @@
-import controller.dao.StudentDAO;
+import persestince.StudentDAO;
 import model.Student;
 import org.junit.After;
 import org.junit.Assert;
@@ -36,7 +36,7 @@ public class TestStudentDAO {
                 properties.getProperty("USER"),
                 properties.getProperty("PASSWORD"));
 
-        studentDAO = new StudentDAO(connection);
+        studentDAO = new StudentDAO();
     }
 
     @After

@@ -1,6 +1,4 @@
-import controller.dao.GroupDAO;
-import controller.dao.PrepodDAO;
-import model.Group;
+import persestince.PrepodDAO;
 import model.Prepod;
 import org.junit.After;
 import org.junit.Assert;
@@ -13,7 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -37,7 +34,7 @@ public class TestPrepodDAO {
                 properties.getProperty("USER"),
                 properties.getProperty("PASSWORD"));
 
-        prepodDAO = new PrepodDAO(connection);
+        prepodDAO = new PrepodDAO();
     }
 
     @After

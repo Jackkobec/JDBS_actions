@@ -1,4 +1,4 @@
-package controller.dao;
+package persestince;
 
 import model.Group;
 import model.Student;
@@ -17,8 +17,8 @@ public class StudentDAO implements CommonDAO<Student, Integer> {
 
     private Connection connection;
 
-    public StudentDAO(Connection connection) {
-        this.connection = connection;
+    public StudentDAO() {
+        this.connection = ConnectionManager.getConnectionManager().getConnection();
     }
 
 

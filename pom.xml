@@ -27,18 +27,19 @@
     <properties>
 
         <java.version>1.8</java.version>
-        <mysql-connector-java.version>5.1.6</mysql-connector-java.version>
         <junit.version>4.12</junit.version>
         <lombok.version>1.16.10</lombok.version>
     </properties>
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
